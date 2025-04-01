@@ -1,0 +1,54 @@
+name: Build uv for Debian
+
+on:
+  workflow_dispatch:
+    inputs:
+      uv_version:
+        description: The version of uv to build.
+        type: string
+        required: true
+      build_version:
+        description: The build version.
+        type: string
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-uv:
+    name: Build
+    runs-on: ubuntu-latest    
+    steps:
+      - name: Checkout uv-debian
+        uses: actions/checkout@v4
+
+      - name: Build uv
+        run: ./build.sh ${{ inputs.uv_version }} ${{ inputs.build_version }}
+      
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact
+          path: uv_*.deb
+
+
+  release-uv:
+    name: (Draft-)Release uv for Debian
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: build-uv
+    steps:
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: artifact
+
+      - name: Publish Release Draft
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: uv_*.deb
+          name: ${{ inputs.uv_version }}+${{ inputs.build_version }}
+          tag_name: ${{ env.RELEASE_TAG }}
+          fail_on_unmatched_files: true
