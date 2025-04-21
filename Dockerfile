@@ -10,6 +10,7 @@ RUN apt update && apt install -y wget
 RUN mkdir -p /output/usr/bin
 RUN mkdir -p /output/usr/share/doc/uv
 RUN cd /output/usr/bin && wget https://github.com/astral-sh/uv/releases/download/${uv_VERSION}/uv-x86_64-unknown-linux-musl.tar.gz && tar -xf uv-x86_64-unknown-linux-musl.tar.gz && rm -f uv-x86_64-unknown-linux-musl.tar.gz
+RUN cd /output/usr/bin && mv uv-x86_64-unknown-linux-musl/* . && rm -fRd uv-x86_64-unknown-linux-musl
 RUN mkdir -p /output/DEBIAN
 
 COPY output/DEBIAN/control /output/DEBIAN/
