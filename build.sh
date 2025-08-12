@@ -1,6 +1,10 @@
 uv_VERSION=$1
 BUILD_VERSION=$2
-declare -a arr=("bookworm" "trixie" "sid")
+
+wget https://github.com/astral-sh/uv/releases/download/${uv_VERSION}/uv-x86_64-unknown-linux-musl.tar.gz && tar -xf uv-x86_64-unknown-linux-musl.tar.gz && rm -f uv-x86_64-unknown-linux-musl.tar.gz
+
+declare -a arr=("bookworm" "trixie" "forky" "sid")
+
 for i in "${arr[@]}"
 do
   DEBIAN_DIST=$i
