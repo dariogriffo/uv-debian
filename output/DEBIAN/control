@@ -1,4 +1,3 @@
-Source: uv
 Section: utils
 Priority: optional
 Maintainer: Dario Griffo <dariogriffo@gmail.com>
@@ -6,6 +5,5 @@ Homepage: https://github.com/astral-sh/uv
 Package: uv
 Version: uv_VERSION-BUILD_VERSION+DIST
 Architecture: amd64
-Depends: 
 Description: An extremely fast Python package and project manager, written in Rust.
 

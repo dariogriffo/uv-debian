@@ -1,17 +1,16 @@
 ARG DEBIAN_DIST=bookworm
-FROM debian:$DEBIAN_DIST
+FROM debian:bookworm
 
 ARG DEBIAN_DIST
 ARG uv_VERSION
 ARG BUILD_VERSION
 ARG FULL_VERSION
 
-RUN apt update && apt install -y wget
 RUN mkdir -p /output/usr/bin
 RUN mkdir -p /output/usr/share/doc/uv
 RUN mkdir -p /output/DEBIAN
 
-COPY uv /output/usr/bin/
+COPY uv-x86_64-unknown-linux-musl/* /output/usr/bin/
 COPY output/DEBIAN/control /output/DEBIAN/
 COPY output/copyright /output/usr/share/doc/uv/
 COPY output/changelog.Debian /output/usr/share/doc/uv/
