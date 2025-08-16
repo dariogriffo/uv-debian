@@ -25,6 +25,7 @@ Currently supported Debian distros are:
 - Forky (v14)
 - Sid (testing)
 
+Thanks to @ranjithrajv
 Supported architectures:
 - amd64 (x86_64) - All distributions
 - arm64 (aarch64) - All distributions
