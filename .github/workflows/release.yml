@@ -11,6 +11,19 @@ on:
         description: The build version.
         type: string
         required: true
+      architecture:
+        description: Architecture to build (amd64, arm64, armel, armhf, ppc64el, s390x, riscv64, or 'all' for all architectures)
+        type: choice
+        default: 'all'
+        options:
+          - 'all'
+          - 'amd64'
+          - 'arm64'
+          - 'armel'
+          - 'armhf'
+          - 'ppc64el'
+          - 's390x'
+          - 'riscv64'
 
 permissions:
   contents: write
@@ -24,7 +37,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build uv
-        run: ./build.sh ${{ inputs.uv_version }} ${{ inputs.build_version }}
+        run: ./build.sh ${{ inputs.uv_version }} ${{ inputs.build_version }} ${{ inputs.architecture }}
       
       - name: Upload Artifact
         uses: actions/upload-artifact@v4

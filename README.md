@@ -19,10 +19,21 @@
 This repository contains build scripts to produce the _unofficial_ Debian packages
 (.deb) for [uv](https://github.com/astral-sh/uv/) hosted at [debian.griffo.io](https://debian.griffo.io)
 
-Currently supported debian distros are:
-- Bookworm
-- Trixie
-- Sid
+Currently supported Debian distros are:
+- Bookworm (v12)
+- Trixie (v13)
+- Forky (v14)
+- Sid (testing)
+
+Thanks to @ranjithrajv
+Supported architectures:
+- amd64 (x86_64) - All distributions
+- arm64 (aarch64) - All distributions
+- armel (ARM EABI) - All distributions
+- armhf (ARM hard float) - All distributions
+- ppc64el (PowerPC 64-bit little endian) - All distributions
+- s390x (IBM System z) - All distributions
+- riscv64 (RISC-V 64-bit) - Trixie, Forky, Sid only
 
 This is an unofficial community project to provide a package that's easy to
 install on Debian. If you're looking for the uv source code, see
@@ -51,10 +62,25 @@ sudo dpkg -i <filename>.deb
 
 To update to a new version, just follow any of the installation methods above. There's no need to uninstall the old version; it will be updated correctly.
 
+## Building
+
+### Build for single architecture
+```sh
+./build.sh <uv_version> <build_version> <architecture>
+# Example: ./build.sh 0.8.11 1 arm64
+```
+
+### Build for all architectures
+```sh
+./build.sh <uv_version> <build_version> all
+# Example: ./build.sh 0.8.11 1 all
+```
+
 ## Roadmap
 
 - [x] Produce a .deb package on GitHub Releases
 - [x] Set up a debian mirror for easier updates
+- [x] Multi-architecture support (amd64, arm64, armel, armhf, ppc64el, s390x)
 
 ## Disclaimer
 
