@@ -1,0 +1,44 @@
+# Multi-architecture configuration for uv
+package_name: uv
+github_repo: astral-sh/uv
+artifact_format: tar.gz
+
+# Debian distributions to build for
+debian_distributions:
+  - bookworm
+  - trixie
+  - forky
+  - sid
+
+# Architecture mappings
+# {version} will be replaced with the actual version number
+architectures:
+  amd64:
+    release_pattern: "uv-x86_64-unknown-linux-musl.tar.gz"
+
+  arm64:
+    release_pattern: "uv-aarch64-unknown-linux-musl.tar.gz"
+
+  armel:
+    release_pattern: "uv-arm-unknown-linux-musleabihf.tar.gz"
+
+  armhf:
+    release_pattern: "uv-armv7-unknown-linux-musleabihf.tar.gz"
+
+  ppc64el:
+    release_pattern: "uv-powerpc64le-unknown-linux-gnu.tar.gz"
+
+  s390x:
+    release_pattern: "uv-s390x-unknown-linux-gnu.tar.gz"
+
+  riscv64:
+    release_pattern: "uv-riscv64gc-unknown-linux-gnu.tar.gz"
+
+# Specify which architectures are supported for specific distributions
+# riscv64 is only supported in Trixie (v13) and later, not in Bookworm (v12)
+distribution_arch_overrides:
+  riscv64:
+    distributions:
+      - trixie
+      - forky
+      - sid

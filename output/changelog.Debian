@@ -1,4 +1,4 @@
-uv (FULL_VERSION) DIST; urgency=low
+PACKAGE_NAME (FULL_VERSION) DIST; urgency=low
 
  
   

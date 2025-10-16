@@ -37,7 +37,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build uv
-        run: ./build.sh ${{ inputs.uv_version }} ${{ inputs.build_version }} ${{ inputs.architecture }}
+        uses: ranjithrajv/debian-multiarch-builder@v.0.1a1
+        with:
+          config-file: 'multiarch-config.yaml'
+          version: ${{ inputs.uv_version }}
+          build-version: ${{ inputs.build_version }}
+          architecture: ${{ inputs.architecture }}
       
       - name: Upload Artifact
         uses: actions/upload-artifact@v4

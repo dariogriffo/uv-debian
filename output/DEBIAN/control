@@ -1,9 +1,9 @@
 Section: utils
 Priority: optional
 Maintainer: Dario Griffo <dariogriffo@gmail.com>
-Homepage: https://github.com/astral-sh/uv
-Package: uv
-Version: uv_VERSION-BUILD_VERSION+DIST
+Homepage: https://github.com/GITHUB_REPO
+Package: PACKAGE_NAME
+Version: VERSION-BUILD_VERSION+DIST
 Architecture: SUPPORTED_ARCHITECTURES
 Description: An extremely fast Python package and project manager, written in Rust.
 
