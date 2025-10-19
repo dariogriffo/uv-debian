@@ -1,7 +1,7 @@
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/dariogriffo/uv-debian/total)
 ![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads/dariogriffo/uv-debian/latest/total)
 ![GitHub Release](https://img.shields.io/github/v/release/dariogriffo/uv-debian)
-![GitHub Release Date](https://img.shields.io/github/release-date/dariogriffo/uv-debian)
+![GitHub Release Date](https://img.shields.io/github/release-date/dariogriffo/uv-debian?display_date=published_at)
 
 <h1>
    <p align="center">
