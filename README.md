@@ -23,12 +23,6 @@ This repository contains build scripts to produce the _unofficial_ Debian packag
 ⭐⭐⭐ Love using uv on Debian? Show your support by starring this repo or buying me a coffee! ⭐⭐⭐
 </p>
 
-<div style="text-align: center; margin-top: 20px;">
-   <a href="https://www.buymeacoffee.com/dariogriffr">
-       <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=dariogriffr&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" alt="Buy me a coffee" />
-   </a>
-</div>
-
 Currently supported Debian distros are:
 - Bookworm (v12)
 - Trixie (v13)
