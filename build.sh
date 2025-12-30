@@ -37,7 +37,7 @@ get_uv_release() {
             ;;
         "i386")
             echo "uv-i686-unknown-linux-musl"
-            ;
+            ;;
         *)
             echo ""
             ;;
