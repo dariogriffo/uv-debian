@@ -6,7 +6,7 @@ if [ -z "$uv_VERSION" ] || [ -z "$BUILD_VERSION" ]; then
     echo "Usage: $0 <uv_version> <build_version> [architecture]"
     echo "Example: $0 0.8.11 1 arm64"
     echo "Example: $0 0.8.11 1 all    # Build for all architectures"
-    echo "Supported architectures: amd64, arm64, armel, armhf, ppc64el, s390x, riscv64, all"
+    echo "Supported architectures: amd64, arm64, armel, armhf, ppc64el, s390x, riscv64, i386, all"
     exit 1
 fi
 
@@ -35,6 +35,9 @@ get_uv_release() {
         "riscv64")
             echo "uv-riscv64gc-unknown-linux-gnu"
             ;;
+        "i386")
+            echo "uv-i686-unknown-linux-musl"
+            ;
         *)
             echo ""
             ;;
@@ -49,7 +52,7 @@ build_architecture() {
     uv_release=$(get_uv_release "$build_arch")
     if [ -z "$uv_release" ]; then
         echo "❌ Unsupported architecture: $build_arch"
-        echo "Supported architectures: amd64, arm64, armel, armhf, ppc64el, s390x, riscv64"
+        echo "Supported architectures: amd64, arm64, armel, armhf, ppc64el, s390x, riscv64, i386"
         return 1
     fi
     
@@ -120,7 +123,7 @@ if [ "$ARCH" = "all" ]; then
     echo ""
     
     # All supported architectures
-    ARCHITECTURES=("amd64" "arm64" "armel" "armhf" "ppc64el" "s390x" "riscv64")
+    ARCHITECTURES=("amd64" "arm64" "armel" "armhf" "ppc64el" "s390x" "riscv64", "i386")
     
     for build_arch in "${ARCHITECTURES[@]}"; do
         echo "==========================================="

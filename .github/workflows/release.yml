@@ -12,7 +12,7 @@ on:
         type: string
         required: true
       architecture:
-        description: Architecture to build (amd64, arm64, armel, armhf, ppc64el, s390x, riscv64, or 'all' for all architectures)
+        description: Architecture to build (amd64, arm64, armel, armhf, ppc64el, s390x, riscv64, i386, or 'all' for all architectures)
         type: choice
         default: 'all'
         options:
@@ -24,6 +24,7 @@ on:
           - 'ppc64el'
           - 's390x'
           - 'riscv64'
+          - 'i386'
 
 permissions:
   contents: write
