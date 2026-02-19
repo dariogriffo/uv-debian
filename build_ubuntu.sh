@@ -74,7 +74,7 @@ build_architecture() {
     if [ "$build_arch" = "riscv64" ]; then
         declare -a arr=("noble")
     else
-        declare -a arr=("jammy" "noble")
+        declare -a arr=("jammy" "noble" "questing")
     fi
 
     for dist in "${arr[@]}"; do
