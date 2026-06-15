@@ -1,0 +1,44 @@
+#!/usr/bin/make -f
+DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
+UV_VERSION := $(shell dpkg-parsechangelog -S Version | sed 's/[-~].*//')
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+
+override_dh_auto_build:
+	@arch="$(DEB_HOST_ARCH)"; \
+	case "$$arch" in \
+		amd64)   UV_RELEASE="uv-x86_64-unknown-linux-musl" ;; \
+		arm64)   UV_RELEASE="uv-aarch64-unknown-linux-musl" ;; \
+		armel)   UV_RELEASE="uv-arm-unknown-linux-musleabihf" ;; \
+		armhf)   UV_RELEASE="uv-armv7-unknown-linux-musleabihf" ;; \
+		ppc64el) UV_RELEASE="uv-powerpc64le-unknown-linux-gnu" ;; \
+		s390x)   UV_RELEASE="uv-s390x-unknown-linux-gnu" ;; \
+		riscv64) UV_RELEASE="uv-riscv64gc-unknown-linux-gnu" ;; \
+		i386)    UV_RELEASE="uv-i686-unknown-linux-musl" ;; \
+		*) echo "Unsupported architecture: $$arch"; exit 1 ;; \
+	esac; \
+	echo "Downloading $$UV_RELEASE for $(UV_VERSION)..."; \
+	wget -q "https://github.com/astral-sh/uv/releases/download/$(UV_VERSION)/$$UV_RELEASE.tar.gz"; \
+	tar -xf "$$UV_RELEASE.tar.gz"; \
+	rm -f "$$UV_RELEASE.tar.gz"; \
+	echo "$$UV_RELEASE" > .uv_release_name
+
+override_dh_auto_install:
+	@UV_RELEASE=$$(cat .uv_release_name); \
+	install -D -m 755 "$$UV_RELEASE/uv"  debian/uv/usr/bin/uv; \
+	install -D -m 755 "$$UV_RELEASE/uvx" debian/uv/usr/bin/uvx
+
+override_dh_auto_test:
+
+override_dh_auto_clean:
+	@if [ -f .uv_release_name ]; then \
+		UV_RELEASE=$$(cat .uv_release_name); \
+		rm -rf "$$UV_RELEASE" .uv_release_name || true; \
+	fi
+
+override_dh_strip:
+
+override_dh_shlibdeps:

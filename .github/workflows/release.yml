@@ -31,38 +31,68 @@ permissions:
 
 jobs:
   build-uv:
-    name: Build
-    runs-on: ubuntu-latest    
+    name: Build Binary Packages
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout uv-debian
         uses: actions/checkout@v4
 
       - name: Build uv
-        run: ./build.sh ${{ inputs.uv_version }} ${{ inputs.build_version }} ${{ inputs.architecture }}
-      
-      - name: Upload Artifact
+        run: ./build_debian.sh ${{ inputs.uv_version }} ${{ inputs.build_version }} ${{ inputs.architecture }} && ./build_ubuntu.sh ${{ inputs.uv_version }} ${{ inputs.build_version }} ${{ inputs.architecture }}
+
+      - name: Upload Binary Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: artifact
+          name: binary-artifact
           path: uv_*.deb
 
+  build-src:
+    name: Build Source Packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout uv-debian
+        uses: actions/checkout@v4
+
+      - name: Install dpkg-dev
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends dpkg-dev devscripts wget ca-certificates
+
+      - name: Build source packages
+        run: ./build_src.sh ${{ inputs.uv_version }} ${{ inputs.build_version }}
+
+      - name: Upload Source Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-artifact
+          path: |
+            uv_*.dsc
+            uv_*.orig.tar.gz
+            uv_*.debian.tar.xz
 
   release-uv:
     name: (Draft-)Release uv for Debian
     if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: build-uv
+    needs: [build-uv, build-src]
     steps:
-      - name: Download All Artifacts
+      - name: Download Binary Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: artifact
+          name: binary-artifact
+
+      - name: Download Source Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: source-artifact
 
       - name: Publish Release Draft
         uses: softprops/action-gh-release@v2
         with:
           draft: true
-          files: uv_*.deb
+          files: |
+            uv_*.deb
+            uv_*.dsc
+            uv_*.orig.tar.gz
+            uv_*.debian.tar.xz
           name: ${{ inputs.uv_version }}+${{ inputs.build_version }}
           tag_name: ${{ env.RELEASE_TAG }}
           fail_on_unmatched_files: true
