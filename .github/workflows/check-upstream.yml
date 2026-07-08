@@ -1,0 +1,58 @@
+name: Check for new uv release
+
+on:
+  schedule:
+    # Hourly, offset to avoid the top-of-hour rush. releases/latest already
+    # excludes prereleases and drafts, so we only ever chase stable tags.
+    - cron: "17 * * * *"
+  workflow_dispatch: {}
+
+# Only one checker at a time.
+concurrency:
+  group: check-upstream
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: write   # required to dispatch release.yml
+
+jobs:
+  check:
+    name: Compare upstream vs published
+    runs-on: ubuntu-latest
+    steps:
+      - name: Detect and dispatch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          # Latest stable uv tag upstream (e.g. 0.8.11).
+          UPSTREAM=$(gh api repos/astral-sh/uv/releases/latest -q .tag_name)
+          echo "Upstream uv: $UPSTREAM"
+
+          # Our latest published release tag is "<uv>+<build>" (e.g. 0.8.11+1).
+          # 404 (no releases yet) -> empty -> treat as "needs building".
+          OURS=$(gh api repos/${{ github.repository }}/releases/latest -q .tag_name 2>/dev/null || echo "")
+          OURS_UV="${OURS%%+*}"
+          echo "Ours: ${OURS:-<none>} (uv part: ${OURS_UV:-<none>})"
+
+          if [ "$UPSTREAM" = "$OURS_UV" ]; then
+            echo "Up to date, nothing to do."
+            exit 0
+          fi
+
+          # Don't dispatch a duplicate if a build is already running/queued.
+          ACTIVE=$(gh run list --workflow=release.yml \
+            --json status \
+            -q '[.[] | select(.status == "in_progress" or .status == "queued")] | length')
+          if [ "$ACTIVE" -gt 0 ]; then
+            echo "A release.yml run is already active ($ACTIVE); skipping this tick."
+            exit 0
+          fi
+
+          echo "New uv release detected: $OURS_UV -> $UPSTREAM. Dispatching build."
+          gh workflow run release.yml \
+            -f uv_version="$UPSTREAM" \
+            -f build_version=1 \
+            -f architecture=all
