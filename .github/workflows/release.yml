@@ -69,7 +69,7 @@ jobs:
             uv_*.debian.tar.xz
 
   release-uv:
-    name: (Draft-)Release uv for Debian
+    name: Release uv for Debian
     if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: [build-uv, build-src]
@@ -84,15 +84,15 @@ jobs:
         with:
           name: source-artifact
 
-      - name: Publish Release Draft
+      - name: Publish Release
         uses: softprops/action-gh-release@v2
         with:
-          draft: true
+          draft: false
           files: |
             uv_*.deb
             uv_*.dsc
             uv_*.orig.tar.gz
             uv_*.debian.tar.xz
           name: ${{ inputs.uv_version }}+${{ inputs.build_version }}
-          tag_name: ${{ env.RELEASE_TAG }}
+          tag_name: ${{ inputs.uv_version }}+${{ inputs.build_version }}
           fail_on_unmatched_files: true
