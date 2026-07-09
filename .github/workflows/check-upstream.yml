@@ -24,6 +24,7 @@ jobs:
       - name: Detect and dispatch
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
 
