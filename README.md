@@ -17,7 +17,7 @@
 # uv for Debian
 
 This repository contains build scripts to produce the _unofficial_ Debian packages
-(.deb) for [uv](https://github.com/astral-sh/uv/) hosted at [debian.griffo.io](https://debian.griffo.io)
+(.deb) for [uv](https://github.com/astral-sh/uv/) hosted at [deb.griffo.io](https://deb.griffo.io)
 
 <p align="center">
 ⭐⭐⭐ Love using uv on Debian? Show your support by starring this repo or [subscribing](https://buy.stripe.com/aFa28q8hr0lRdlm4a2enS01) — access to this repository requires a yearly subscription. ⭐⭐⭐
@@ -46,13 +46,13 @@ install on Debian. If you're looking for the uv source code, see
 
 ## Install/Update
 
-📖 **Step-by-step install guide:** [Debian](https://debian.griffo.io/install-latest-uv-in-debian.html) · [Ubuntu](https://debian.griffo.io/install-latest-uv-in-ubuntu.html)
+📖 **Step-by-step install guide:** [Debian](https://deb.griffo.io/install-latest-uv-in-debian.html) · [Ubuntu](https://deb.griffo.io/install-latest-uv-in-ubuntu.html)
 
 ### The Debian way
 
 ```sh
-curl -sS https://debian.griffo.io/EA0F721D231FDD3A0A17B9AC7808B4DD62C41256.asc | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/debian.griffo.io.gpg
-echo "deb https://debian.griffo.io/apt $(lsb_release -sc 2>/dev/null) main" | sudo tee /etc/apt/sources.list.d/debian.griffo.io.list
+curl -sS https://deb.griffo.io/EA0F721D231FDD3A0A17B9AC7808B4DD62C41256.asc | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/deb.griffo.io.gpg
+echo "deb https://deb.griffo.io/apt $(lsb_release -sc 2>/dev/null) main" | sudo tee /etc/apt/sources.list.d/deb.griffo.io.list
 sudo apt update
 sudo apt install -y uv
 ```
