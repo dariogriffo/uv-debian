@@ -14,7 +14,7 @@ RUN mkdir -p /output/DEBIAN
 
 # The upstream tarball holds both binaries: uv and uvx. Both must be installed
 # here, since uvx execs the uv binary sitting next to it rather than searching
-# PATH. The companion uvx package is metadata only (see Dockerfile.uvx).
+# PATH -- which is also why uvx is a Provides of this package, not one of its own.
 COPY ${UV_RELEASE}/* /output/usr/bin/
 COPY output/DEBIAN/control /output/DEBIAN/
 COPY output/DEBIAN/postinst /output/DEBIAN/postinst

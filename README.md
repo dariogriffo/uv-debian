@@ -19,14 +19,11 @@
 This repository contains build scripts to produce the _unofficial_ Debian packages
 (.deb) for [uv](https://github.com/astral-sh/uv/) hosted at [deb.griffo.io](https://deb.griffo.io)
 
-Two packages are produced:
-- `uv` — the uv binary, plus the [`uvx`](https://docs.astral.sh/uv/guides/tools/)
-  tool runner, both installed into `/usr/bin`.
-- `uvx` — an `Architecture: all` package that depends on `uv`, so
-  `apt install uvx` works. It ships no executable of its own: `uvx` is a small
-  trampoline that runs the `uv` binary sitting next to it (it does not search
-  `PATH`), so it has to live in the same directory as `uv` and is shipped by the
-  `uv` package.
+The package installs both `uv` and [`uvx`](https://docs.astral.sh/uv/guides/tools/),
+the tool runner. They ship together because `uvx` is a small trampoline that runs
+the `uv` binary sitting next to it — it does not search `PATH` — so it has to live
+in the same directory as `uv`. The package declares `Provides: uvx`, so
+`apt install uvx` and `apt search uvx` resolve to it.
 
 Currently supported Debian distros are:
 - Bookworm (v12)
@@ -68,7 +65,8 @@ sudo apt update
 sudo apt install -y uv
 ```
 
-`uvx` is installed alongside `uv`, so there is nothing else to do to use it:
+`uvx` comes with it, so there is nothing else to install (`apt install uvx`
+resolves to the same package):
 
 ```sh
 uvx pycowsay 'hello world!'
@@ -106,7 +104,7 @@ To update to a new version, just follow any of the installation methods above. T
 - [x] Produce a .deb package on GitHub Releases
 - [x] Set up a debian mirror for easier updates
 - [x] Multi-architecture support (amd64, arm64, armel, armhf, ppc64el, s390x)
-- [x] Ship `uvx` and make it installable as its own package
+- [x] Ship `uvx`, and make `apt install uvx` resolve to the `uv` package
 
 ## Disclaimer
 
