@@ -1,0 +1,17 @@
+Section: utils
+Priority: optional
+Maintainer: Dario Griffo <dariogriffo@gmail.com>
+Homepage: https://docs.astral.sh/uv/guides/tools/
+Package: uvx
+Version: uv_VERSION-BUILD_VERSION~DIST
+Architecture: all
+Depends: uv (>= uv_VERSION-BUILD_VERSION~DIST)
+Description: Run tools published as Python packages, without installing them
+ uvx runs a command provided by a Python package in a temporary, isolated
+ environment, similar to pipx run. It is the tool runner of uv and is an
+ alias for "uv tool run".
+ .
+ The uvx executable itself is shipped by the uv package as /usr/bin/uvx,
+ because uvx is a small trampoline that looks for the uv binary sitting next
+ to it and cannot run without it. This package installs no files of its own;
+ it exists so that "apt install uvx" and "apt search uvx" lead to uv.

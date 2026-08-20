@@ -26,6 +26,9 @@ override_dh_auto_build:
 	rm -f "$$UV_RELEASE.tar.gz"; \
 	echo "$$UV_RELEASE" > .uv_release_name
 
+# uvx must land next to uv: it is a trampoline that execs its sibling uv binary
+# and does not search PATH. The separate uvx package is therefore empty and only
+# depends on uv (see debian/control).
 override_dh_auto_install:
 	@UV_RELEASE=$$(cat .uv_release_name); \
 	install -D -m 755 "$$UV_RELEASE/uv"  debian/uv/usr/bin/uv; \

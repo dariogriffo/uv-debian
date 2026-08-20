@@ -45,11 +45,16 @@ jobs:
       - name: Build uv
         run: ./build_debian.sh ${{ inputs.uv_version }} ${{ inputs.build_version }} ${{ inputs.architecture }} && ./build_ubuntu.sh ${{ inputs.uv_version }} ${{ inputs.build_version }} ${{ inputs.architecture }}
 
+      - name: Build uvx
+        run: ./build_uvx.sh ${{ inputs.uv_version }} ${{ inputs.build_version }}
+
       - name: Upload Binary Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: binary-artifact
-          path: uv_*.deb
+          path: |
+            uv_*.deb
+            uvx_*.deb
 
   build-src:
     name: Build Source Packages
@@ -95,6 +100,7 @@ jobs:
           draft: false
           files: |
             uv_*.deb
+            uvx_*.deb
             uv_*.dsc
             uv_*.orig.tar.gz
             uv_*.debian.tar.xz

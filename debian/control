@@ -13,3 +13,19 @@ Depends: ${misc:Depends}
 Description: An extremely fast Python package and project manager, written in Rust
  uv is an extremely fast Python package installer and resolver, written in Rust,
  and designed as a drop-in replacement for pip and pip-tools workflows.
+ .
+ This package also installs uvx, the uv tool runner, which runs a command
+ provided by a Python package in a temporary, isolated environment.
+
+Package: uvx
+Architecture: all
+Depends: uv (>= ${source:Version}), ${misc:Depends}
+Description: Run tools published as Python packages, without installing them
+ uvx runs a command provided by a Python package in a temporary, isolated
+ environment, similar to pipx run. It is the tool runner of uv and is an
+ alias for "uv tool run".
+ .
+ The uvx executable itself is shipped by the uv package as /usr/bin/uvx,
+ because uvx is a small trampoline that looks for the uv binary sitting next
+ to it and cannot run without it. This package installs no files of its own;
+ it exists so that "apt install uvx" and "apt search uvx" lead to uv.

@@ -1,0 +1,5 @@
+uvx (FULL_VERSION) DIST; urgency=low
+
+  * uvx tool runner, provided by the uv package.
+
+ -- Dario Griffo <dariogriffo@gmail.com>
