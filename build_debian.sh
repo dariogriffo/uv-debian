@@ -75,40 +75,32 @@ build_architecture() {
     
     rm -f "${uv_release}.tar.gz"
     
-    # Build packages for appropriate Debian distributions
-    # riscv64 is only supported in trixie (v13) and later, not in bookworm (v12)
-    if [ "$build_arch" = "riscv64" ]; then
-        declare -a arr=("trixie" "forky" "sid")
-    else
-        declare -a arr=("bookworm" "trixie" "forky" "sid")
+    # One package for every suite: upstream ships one binary per architecture,
+    # so only the old ~<suite> version suffix ever differed. The fixed ~griffo
+    # keeps it below the distro's own build of the same version.
+    FULL_VERSION="$uv_VERSION-${BUILD_VERSION}~griffo_${build_arch}"
+    echo "  Building $FULL_VERSION"
+    
+    if ! docker build . -t "uv-$build_arch" \
+        --build-arg uv_VERSION="$uv_VERSION" \
+        --build-arg BUILD_VERSION="$BUILD_VERSION" \
+        --build-arg FULL_VERSION="$FULL_VERSION" \
+        --build-arg ARCH="$build_arch" \
+        --build-arg UV_RELEASE="$uv_release"; then
+        echo "❌ Failed to build Docker image for $build_arch"
+        return 1
     fi
     
-    for dist in "${arr[@]}"; do
-        FULL_VERSION="$uv_VERSION-${BUILD_VERSION}~${dist}_${build_arch}"
-        echo "  Building $FULL_VERSION"
-        
-        if ! docker build . -t "uv-$dist-$build_arch" \
-            --build-arg DEBIAN_DIST="$dist" \
-            --build-arg uv_VERSION="$uv_VERSION" \
-            --build-arg BUILD_VERSION="$BUILD_VERSION" \
-            --build-arg FULL_VERSION="$FULL_VERSION" \
-            --build-arg ARCH="$build_arch" \
-            --build-arg UV_RELEASE="$uv_release"; then
-            echo "❌ Failed to build Docker image for $dist on $build_arch"
-            return 1
-        fi
-        
-        id="$(docker create "uv-$dist-$build_arch")"
-        if ! docker cp "$id:/uv_$FULL_VERSION.deb" - > "./uv_$FULL_VERSION.deb"; then
-            echo "❌ Failed to extract .deb package for $dist on $build_arch"
-            return 1
-        fi
-        
-        if ! tar -xf "./uv_$FULL_VERSION.deb"; then
-            echo "❌ Failed to extract .deb contents for $dist on $build_arch"
-            return 1
-        fi
-    done
+    id="$(docker create "uv-$build_arch")"
+    if ! docker cp "$id:/uv_$FULL_VERSION.deb" - > "./uv_$FULL_VERSION.deb"; then
+        echo "❌ Failed to extract .deb package for $build_arch"
+        return 1
+    fi
+    
+    if ! tar -xf "./uv_$FULL_VERSION.deb"; then
+        echo "❌ Failed to extract .deb contents for $build_arch"
+        return 1
+    fi
     
     # Clean up extracted directory
     rm -rf "$uv_release" || true

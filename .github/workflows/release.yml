@@ -43,7 +43,7 @@ jobs:
         run: ./validate_license.sh ${{ inputs.uv_version }}
 
       - name: Build uv
-        run: ./build_debian.sh ${{ inputs.uv_version }} ${{ inputs.build_version }} ${{ inputs.architecture }} && ./build_ubuntu.sh ${{ inputs.uv_version }} ${{ inputs.build_version }} ${{ inputs.architecture }}
+        run: ./build_debian.sh ${{ inputs.uv_version }} ${{ inputs.build_version }} ${{ inputs.architecture }}
 
       - name: Upload Binary Artifacts
         uses: actions/upload-artifact@v4
